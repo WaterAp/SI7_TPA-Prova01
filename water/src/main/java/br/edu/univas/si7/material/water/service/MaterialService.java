@@ -14,7 +14,7 @@ import br.edu.univas.si7.material.water.repositories.*;
 import br.edu.univas.si7.material.water.util.*;
 
 
-
+@Service
 public class MaterialService {
 	private MaterialRepository repo;
 	
