@@ -23,7 +23,7 @@ public class WaterApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		MaterialEntity m1 = new MaterialEntity(1, "ferro", 7.30f, "proverdor 1", "16/04/2024",  true);
+		MaterialEntity m1 = new MaterialEntity(1, "granito", 77.30f, "proverdor 1", "16/04/2024",  true);
 		repo.save(m1);
 		
 		

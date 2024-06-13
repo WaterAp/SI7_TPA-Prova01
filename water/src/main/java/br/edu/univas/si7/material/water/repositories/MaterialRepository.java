@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import br.edu.univas.si7.material.water.entities.MaterialEntity;
 
 @Repository
-public interface MaterialRepository extends JpaRepository<MaterialEntity, Integer> {
+public interface MaterialRepository extends JpaRepository<MaterialEntity, Long> {
 
 	public List<MaterialEntity> findByActive(Boolean active);
 

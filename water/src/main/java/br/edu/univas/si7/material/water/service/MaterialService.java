@@ -26,20 +26,49 @@ public class MaterialService {
 		this.repo = repo;
 	}
 	
-	public MaterialEntity findById(Integer code) {
-		Optional<MaterialEntity> obj = repo.findById(code);
+	public MaterialEntity findById(long code) {
+		Optional<MaterialEntity> obj = repo.findById(Long.valueOf(code));
 		MaterialEntity entity = obj.orElseThrow(() -> new RuntimeException("Object not found: " + code));
 		return entity;
 	}
 	
 	public void createProduct(MaterialDTO material) {
-		repo.save(converter.toEntity(material));
+	    validateMaterial(material);
+	    MaterialEntity materialEntity = converter.toEntity(material);
+	    System.out.println("Trying to create material with code: " + materialEntity.getCode());
+	    
+	    if (repo.findById(materialEntity.getCode()).isPresent()) {
+	        throw new RuntimeException("Material with code " + materialEntity.getCode() + " already exists.");
+	    }
+	    repo.save(materialEntity);
 	}
+
 	
-	public void updateMaterial(MaterialDTO material, Integer code) {
-		if (code == null || material == null || !code.equals(material.getCode())) {
-			throw new RuntimeException("Invalid product code.");
-		}
+	private void validateMaterial(MaterialDTO material) {
+        if (material == null) {
+            throw new IllegalArgumentException("Material cannot be null.");
+        }
+        if (material.getName() == null || material.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Material name cannot be empty.");
+        }
+        if (material.getPrice() <= 0) {
+            throw new IllegalArgumentException("Material price must be greater than 0.");
+        }
+        if (material.getProvider() == null || material.getProvider().trim().isEmpty()) {
+            throw new IllegalArgumentException("Material provider cannot be empty.");
+        }
+        if (material.getLastBuyDate() == null || material.getLastBuyDate().trim().isEmpty()) {
+            throw new IllegalArgumentException("Material last buy date cannot be empty.");
+        }
+    }
+	
+	public void updateMaterial(MaterialDTO material, long code) {
+		if (material == null) {
+	        throw new RuntimeException("Material data is null.");
+	    }
+	    if (material.getCode() != code) {  
+	        throw new RuntimeException("Invalid product code.");
+	    }
 		MaterialEntity existingObj = findById(code);
 		updateData(existingObj);
 		repo.save(existingObj);
